@@ -1,4 +1,4 @@
-import get
+import src.get as get
 
 
 def main():

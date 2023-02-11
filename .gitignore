@@ -1,6 +1,11 @@
 .idea
 __pycache__
-dist
+*.spec
+*.pyc
+
 data
 output
+
 .env
+build
+dist

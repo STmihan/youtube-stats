@@ -1,8 +1,8 @@
 import os
 import pytube as Pytube
 
-import get
-import utils as Utils
+import src.get as GET
+from src import utils
 
 if not os.path.exists("output"):
     os.mkdir("output")
@@ -41,7 +41,7 @@ def _start_download(videos, username):
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
     for video in videos:
-        filename = f"{Utils.remove_symbols(video.title)}.mp4"
+        filename = f"{utils.remove_symbols(video.title)}.mp4"
         path = os.path.join(output_folder, filename)
         if os.path.exists(path):
             print(f"Video '{video.title}' already exists in '{path}'")
@@ -61,7 +61,7 @@ def _start_download(videos, username):
 
 
 def main():
-    bundle = get.get_videos()
+    bundle = GET.get_videos()
     videos = bundle["videos"]
     name = bundle["name"]
     print(f"Found {len(videos)} videos for '{name}'")

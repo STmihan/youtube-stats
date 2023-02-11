@@ -2,7 +2,7 @@ import matplotlib.pyplot as PLT
 import matplotlib.ticker as TICKER
 import datetime as DT
 
-import get
+from src import get
 
 
 def _get_compare_type():
@@ -51,7 +51,6 @@ def _get_view_count_per_week(videos):
 def _get_view_count_per_month(videos):
     view_count_per_month = {}
     for video in videos:
-        print(video.view_count)
         date = DT.datetime.strptime(video.date, "%Y-%m-%d")
         month = date.month
         if month in view_count_per_month:

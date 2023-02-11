@@ -1,7 +1,11 @@
-import visualize_data as VISUALIZE
-import collect_data as COLLECT
-import calculate_stats as STATS
-import download_video as DOWNLOAD
+import os
+import sys
+
+from src import \
+    calculate_stats as STATS, \
+    collect_data as COLLECT, \
+    download_video as DOWNLOAD, \
+    visualize_data as VISUALIZE
 
 
 def select():
@@ -24,7 +28,7 @@ def select():
     elif option == 4:
         DOWNLOAD.main()
     elif option == 5:
-        exit()
+        sys.exit()
 
 
 def main():

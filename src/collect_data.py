@@ -1,16 +1,18 @@
 import os.path
+import sys
 
-from dotenv import load_dotenv
 import requests
 import json as JSON
-import utils as Utils
-from channel import Channel
 
-from video import Video
+from src.channel import Channel
+from src.video import Video
+from src import utils
+
+from dotenv import load_dotenv
 
 load_dotenv()
-
 KEY = os.getenv("API_KEY", "")
+
 if not os.path.exists("data"):
     os.mkdir("data")
 
@@ -23,20 +25,23 @@ def get_user_id_by_video_url():
         video_id = video_url.split("v=")[-1]
     else:
         print("Invalid url")
-        exit()
+        sys.exit()
 
     video_response = requests.get("https://www.googleapis.com/youtube/v3/videos", params={
         "part": "snippet",
         "id": video_id,
         "key": KEY,
     })
+    if video_response.status_code != 200:
+        print("Error while getting video")
+        print(video_response.text)
+        sys.exit()
     json = video_response.json()
     if json["pageInfo"]["totalResults"] == 0:
         print("No video found")
-        exit()
+        sys.exit()
 
     user_id = json["items"][0]["snippet"]["channelId"]
-    print(f"Found user id: {user_id}")
     return user_id
 
 
@@ -49,7 +54,7 @@ def get_channel(user_id):
 
     if channelResponse.json()["pageInfo"]["totalResults"] == 0:
         print("No channel found")
-        exit()
+        sys.exit()
 
     channel = channelResponse.json()["items"][0]
     uploads_id = channel["contentDetails"]["relatedPlaylists"]["uploads"]
@@ -123,13 +128,14 @@ def main():
     user_id = get_user_id_by_video_url()
     channel = get_channel(user_id)
     username = channel.name
+    print(f"Getting channel {username} ({channel.channel_id})")
 
     pretty = True
     videos = get_videos(channel.upload_playlist_id)
     channel.set_videos(videos)
 
     # remove all symbols from username
-    filename = Utils.remove_symbols(username)
+    filename = utils.remove_symbols(username)
 
     with open(f"data/{filename}.json", "w", encoding="utf-8") as f:
         f.write(JSON.dumps(channel.to_json(), indent=4 if pretty else None, ensure_ascii=False))

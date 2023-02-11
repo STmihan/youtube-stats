@@ -86,3 +86,9 @@ Features:
 2. Enter the URL of a video from the channel you want to add
 3. After the download is complete, you can use 2, 3 and 4 to features from the menu with new channel
 
+## Build ##
+1. Install pyinstaller: `pip install pyinstaller`
+2. Install requirements: `pip install -r requirements.txt`
+3. Run `python clean.py` (or `python3 clean.py` on Linux)
+4. Run the command: `./build.bat` (or `sh build.sh` on Linux)
+5. Executable will be in the 'dist' folder

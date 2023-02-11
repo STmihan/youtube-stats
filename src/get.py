@@ -2,8 +2,8 @@ import datetime as DT
 import json as JSON
 import os
 
-from channel import Channel
-from video import Video
+from src.channel import Channel
+from src.video import Video
 
 FROM_DATE = DT.date(year=2000, month=1, day=1)
 TO_DATE = DT.date.today()
