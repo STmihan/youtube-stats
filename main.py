@@ -1,11 +1,11 @@
-import os
 import sys
 
 from src import \
     calculate_stats as STATS, \
     collect_data as COLLECT, \
     download_video as DOWNLOAD, \
-    visualize_data as VISUALIZE
+    visualize_data as VISUALIZE, \
+    download_one as DOWNLOAD_ONE
 
 
 def select():
@@ -15,7 +15,8 @@ def select():
     print("2. Visualize data")
     print("3. Get channel statistics")
     print("4. Download videos")
-    print("5. Exit")
+    print("5. Download video by URL")
+    print("6. Exit")
     print("-" * 20)
     inp = input("Option: ")
     option = int(inp) if inp.isdigit() else 0
@@ -28,6 +29,8 @@ def select():
     elif option == 4:
         DOWNLOAD.main()
     elif option == 5:
+        DOWNLOAD_ONE.main()
+    elif option == 6:
         sys.exit()
 
 

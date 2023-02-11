@@ -53,7 +53,14 @@ Features:
 7. Confirm the download
 8. Videos will be downloaded to the 'output' folder
 
-### 2. Visualize the number of views of a YouTube channel per day, week or month ###
+### 2. Download the YouTube video by URL ###
+
+1. Enter 5 in the main menu
+2. Enter the URL of the video you want to download
+3. Choose the quality of the video you want to download
+4. Videos will be downloaded to the 'output' folder
+
+### 3. Visualize the number of views of a YouTube channel per day, week or month ###
 
 1. Enter 2 in the main menu
 2. Enter "n" or just press enter
@@ -62,7 +69,7 @@ Features:
 5. Choose the start date and end date
 6. Choose the period you want to visualize 
 
-### 3. Compare the number of views of two YouTube channels per day, week or month ###
+### 4. Compare the number of views of two YouTube channels per day, week or month ###
 
 1. Enter 2 in the main menu
 2. Enter "y"
@@ -73,14 +80,14 @@ Features:
 7. Choose filter options
 8. Choose the period you want to visualize
 
-### 4. Show the channel's statistics ###
+### 5. Show the channel's statistics ###
 
 1. Enter 3 in the main menu
 2. Choose the channel you want to show statistics
 3. Choose, do you want to include short videos (less than 1 minute)
 4. Choose the start date and end date
 
-### 5. Add a channel to the database ###
+### 6. Add a channel to the database ###
 
 1. Enter 1 in the main menu
 2. Enter the URL of a video from the channel you want to add
