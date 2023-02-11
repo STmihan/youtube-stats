@@ -1,31 +1,13 @@
-import get_videos
-
-
-def get_average_views_per_video(videos):
-    total_views = 0
-    for video in videos:
-        total_views += int(video.view_count)
-    return round(total_views / len(videos)).__format__(",").replace(",", " ")
-
-
-def get_average_likes_per_video(videos):
-    total_likes = 0
-    for video in videos:
-        total_likes += int(video.like_count)
-    return round(total_likes / len(videos)).__format__(",").replace(",", " ")
+import get
 
 
 def main():
-    bundle = get_videos.get_videos()
-    videos = bundle["videos"]
-    name = bundle["name"]
+    channel = get.get_channel()
     print("-" * 20)
-    print("Channel: ", name)
-    print("Total videos: ", len(videos))
-    print("-" * 20)
-    print("Average views per video: ", get_average_views_per_video(videos))
-    print("Average likes per video: ", get_average_likes_per_video(videos))
-    print("-" * 20)
+    print(channel)
+    print()
+    print("Average views per video: ", channel.get_average_views_per_video())
+    print("Average likes per video: ", channel.get_average_likes_per_video())
 
 
 if __name__ == "__main__":

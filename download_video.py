@@ -1,7 +1,7 @@
 import os
 import pytube as Pytube
 
-import get_videos
+import get
 import utils as Utils
 
 if not os.path.exists("output"):
@@ -61,7 +61,7 @@ def _start_download(videos, username):
 
 
 def main():
-    bundle = get_videos.get_videos()
+    bundle = get.get_videos()
     videos = bundle["videos"]
     name = bundle["name"]
     print(f"Found {len(videos)} videos for '{name}'")

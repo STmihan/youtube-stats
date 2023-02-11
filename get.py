@@ -2,6 +2,7 @@ import datetime as DT
 import json as JSON
 import os
 
+from channel import Channel
 from video import Video
 
 FROM_DATE = DT.date(year=2000, month=1, day=1)
@@ -13,7 +14,7 @@ def _get_videos_data(path):
     with open(path, "r", encoding="utf-8") as f:
         videos_json = JSON.load(f)
         videos = []
-        for json in videos_json:
+        for json in videos_json["videos"]:
             video = Video.from_json(json)
             videos.append(video)
 
@@ -57,17 +58,24 @@ def _select_options():
 
 
 def get_videos():
-    path = _select_path()
-    name = path.split("/")[-1].split(".")[0]
+    channel = get_channel()
     _select_options()
 
-    videos = _get_videos_data(path)
-    videos = [video for video in videos if not video.is_short] if not INCLUDE_SHORT_VIDEOS else videos
+    # Filter videos
+    videos = channel.videos if INCLUDE_SHORT_VIDEOS else [video for video in channel.videos if video.get_duration() > 60]
     videos = _get_video_between_dates(videos, FROM_DATE, TO_DATE)
     return {
-        "name": name,
         "videos": videos,
+        "name": channel.name,
     }
+
+
+def get_channel():
+    path = _select_path()
+    with open(path, "r", encoding="utf-8") as f:
+        channel_json = JSON.load(f)
+        channel = Channel.from_json(channel_json)
+        return channel
 
 
 def get_multiple_videos():

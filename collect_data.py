@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import requests
 import json as JSON
 import utils as Utils
+from channel import Channel
 
 from video import Video
 
@@ -12,22 +13,6 @@ load_dotenv()
 KEY = os.getenv("API_KEY", "")
 if not os.path.exists("data"):
     os.mkdir("data")
-
-
-def get_user_nickname(user_id):
-    user_response = requests.get("https://www.googleapis.com/youtube/v3/channels", params={
-        "part": "snippet",
-        "id": user_id,
-        "key": KEY,
-    })
-    json = user_response.json()
-    if json["pageInfo"]["totalResults"] == 0:
-        print("No user found")
-        exit()
-
-    nickname = json["items"][0]["snippet"]["title"]
-    print(f"Found nickname: {nickname}")
-    return nickname
 
 
 def get_user_id_by_video_url():
@@ -55,9 +40,9 @@ def get_user_id_by_video_url():
     return user_id
 
 
-def get_playlist_id(user_id):
+def get_channel(user_id):
     channelResponse = requests.get("https://www.googleapis.com/youtube/v3/channels", params={
-        "part": "contentDetails",
+        "part": "contentDetails, statistics, snippet",
         "id": user_id,
         "key": KEY,
     })
@@ -66,9 +51,18 @@ def get_playlist_id(user_id):
         print("No channel found")
         exit()
 
-    uploads_id = channelResponse.json()["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-    print(f"Found uploads playlist: {uploads_id}")
-    return uploads_id
+    channel = channelResponse.json()["items"][0]
+    uploads_id = channel["contentDetails"]["relatedPlaylists"]["uploads"]
+    name = channel["snippet"]["title"]
+    view_count = channel["statistics"]["viewCount"]
+    subscriber_count = channel["statistics"]["subscriberCount"] if "subscriberCount" in channel["statistics"] else -1
+    video_count = channel["statistics"]["videoCount"]
+    return Channel(name=name,
+                   video_count=video_count,
+                   upload_playlist_id=uploads_id,
+                   view_count=view_count,
+                   channel_id=user_id,
+                   subscriber_count=subscriber_count)
 
 
 def get_videos_from_response(playlist_response, video_response):
@@ -89,8 +83,8 @@ def get_videos_from_response(playlist_response, video_response):
     return videos
 
 
-def get_videos(user_id):
-    playlist_id = get_playlist_id(user_id)
+def get_videos(playlist_id):
+    playlist_id = playlist_id
     playlist_response = requests.get("https://www.googleapis.com/youtube/v3/playlistItems", params={
         "part": "snippet",
         "playlistId": playlist_id,
@@ -127,16 +121,18 @@ def get_videos(user_id):
 
 def main():
     user_id = get_user_id_by_video_url()
-    username = get_user_nickname(user_id)
+    channel = get_channel(user_id)
+    username = channel.name
 
     pretty = True
-    videos = get_videos(user_id)
+    videos = get_videos(channel.upload_playlist_id)
+    channel.set_videos(videos)
 
     # remove all symbols from username
     filename = Utils.remove_symbols(username)
 
     with open(f"data/{filename}.json", "w", encoding="utf-8") as f:
-        f.write(JSON.dumps([video.to_json() for video in videos], indent=(4 if pretty else None), ensure_ascii=False))
+        f.write(JSON.dumps(channel.to_json(), indent=4 if pretty else None, ensure_ascii=False))
 
 
 if __name__ == "__main__":

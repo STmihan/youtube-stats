@@ -2,7 +2,7 @@ import matplotlib.pyplot as PLT
 import matplotlib.ticker as TICKER
 import datetime as DT
 
-import get_videos
+import get
 
 
 def _get_compare_type():
@@ -51,6 +51,7 @@ def _get_view_count_per_week(videos):
 def _get_view_count_per_month(videos):
     view_count_per_month = {}
     for video in videos:
+        print(video.view_count)
         date = DT.datetime.strptime(video.date, "%Y-%m-%d")
         month = date.month
         if month in view_count_per_month:
@@ -101,17 +102,17 @@ def main():
         fast = input("Fast mode? (Y/n): ").lower() != "n"
         bundles = []
         if fast:
-            bundles = get_videos.get_multiple_videos()
+            bundles = get.get_multiple_videos()
         else:
             while True:
-                videos = get_videos.get_videos()
+                videos = get.get_videos()
                 bundles.append(videos)
                 if input("Add another channel? (y/N): ").lower() != "y":
                     break
         compare_type = _get_compare_type()
         compare_data(bundles, compare_type)
     else:
-        videos = get_videos.get_videos()["videos"]
+        videos = get.get_videos()["videos"]
         compare_type = _get_compare_type()
         visualize_data(videos, compare_type)
 
