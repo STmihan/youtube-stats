@@ -1,12 +1,15 @@
 import os.path
 
+from dotenv import load_dotenv
 import requests
 import json as JSON
 import utils as Utils
 
 from video import Video
 
-KEY = "AIzaSyB598mRQO4s7E-JfXLFpQnEVVRmieU_ryY"
+load_dotenv()
+
+KEY = os.getenv("API_KEY", "")
 if not os.path.exists("data"):
     os.mkdir("data")
 
