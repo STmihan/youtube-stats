@@ -36,6 +36,7 @@ def _download_video(video, path, filename):
 
 
 def _start_download(videos, username):
+    print("-" * 50)
     output_folder = os.path.join("output", username)
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
@@ -45,16 +46,18 @@ def _start_download(videos, username):
         if os.path.exists(path):
             print(f"Video '{video.title}' already exists in '{path}'")
             print(f"Skipping")
+            print("-" * 50)
             continue
 
         print(f"Downloading '{video.title}'")
         result = _download_video(video, path=output_folder, filename=filename)
         if result:
-            print("\n")
-            print(f"Downloaded '{video.title}' to '{path}'")
+            print(f"\nDownloaded '{video.title}' to '{path}'")
         else:
             print(f"Failed to download '{video.title}'")
             continue
+        print("Downloaded {}/{}".format(videos.index(video) + 1, len(videos)))
+        print("-" * 50)
 
 
 def main():
